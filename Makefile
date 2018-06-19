@@ -7,9 +7,9 @@ LDFLAGS=-Wall -Werror -std=c++14
 # directories
 OBJ_DIR=./obj
 BIN_DIR=./bin
-INC_DIR=
+INC_DIR=-I /usr/include/bullet
 LIB_DIR=
-LIBRARIES=
+LIBRARIES=-lBulletDynamics -lBulletCollision -lLinearMath
 
 all: link
 	@echo "\e[92mMaking done!\e[39m"
