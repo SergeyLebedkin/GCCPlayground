@@ -29,6 +29,9 @@ compile: clean
 	$(CC) $(CXXFLAGS) $(DEFINES) $(INC_DIR) -c main.cpp -o $(OBJ_DIR)/main.o 
 	$(CC) $(CXXFLAGS) $(DEFINES) $(INC_DIR) -c sec.cpp  -o $(OBJ_DIR)/sec.o 
 
+run:
+	./bin/main
+
 clean:
 	@echo "\e[92mClean up...\e[39m"
 	rm -rf $(BIN_DIR)
