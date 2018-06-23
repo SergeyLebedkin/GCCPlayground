@@ -10,6 +10,7 @@ BIN_DIR=./bin
 INC_DIR=-I /usr/include
 LIB_DIR=
 LIBRARIES=-lglfw -lGLESv2
+DEFINES=-DGLFW_INCLUDE_ES2
 
 all: link
 	@echo "\e[92mMaking done!\e[39m"
@@ -25,8 +26,8 @@ link: compile
 compile: clean
 	@echo "\e[92mStart compiling...\e[39m"
 	mkdir -p $(OBJ_DIR)
-	$(CC) $(CXXFLAGS) $(INC_DIR) -c main.cpp -o $(OBJ_DIR)/main.o 
-	$(CC) $(CXXFLAGS) $(INC_DIR) -c sec.cpp  -o $(OBJ_DIR)/sec.o 
+	$(CC) $(CXXFLAGS) $(DEFINES) $(INC_DIR) -c main.cpp -o $(OBJ_DIR)/main.o 
+	$(CC) $(CXXFLAGS) $(DEFINES) $(INC_DIR) -c sec.cpp  -o $(OBJ_DIR)/sec.o 
 
 clean:
 	@echo "\e[92mClean up...\e[39m"
