@@ -1,7 +1,7 @@
 #include <GLFW/glfw3.h>
-#include <iostream>
 #include <glm/glm.hpp>
-#include <GLES2/gl2.h>
+
+#include <iostream>
 
 static void error_callback(int error, const char* description)
 {
