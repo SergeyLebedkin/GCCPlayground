@@ -41,6 +41,21 @@ int main(void)
 	std::cout << "GL_RENDERER:                 " << glGetString(GL_RENDERER) << std::endl;
 	std::cout << "GL_VERSION:                  " << glGetString(GL_VERSION) << std::endl;
 
+	GLint value = 0;
+	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &value);
+	std::cout << "GL_MAX_VERTEX_ATTRIBS: " << value << std::endl;
+	glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &value);
+	std::cout << "GL_MAX_VERTEX_UNIFORM_VECTORS: " << value << std::endl;
+	glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, &value);
+	std::cout << "GL_MAX_FRAGMENT_UNIFORM_VECTORS: " << value << std::endl;
+	glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE, &value);
+	std::cout << "GL_MAX_RENDERBUFFER_SIZE: " << value << std::endl;
+	glGetIntegerv(GL_MAX_VARYING_VECTORS, &value);
+	std::cout << "GL_MAX_VARYING_VECTORS: " << value << std::endl;
+	glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &value);
+	std::cout << "GL_NUM_COMPRESSED_TEXTURE_FORMATS: " << value << std::endl;
+	
+
 	while (!glfwWindowShouldClose(window))
 	{
 		int width, height;
