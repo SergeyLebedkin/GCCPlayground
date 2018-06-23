@@ -1,72 +1,56 @@
+#include <GLFW/glfw3.h>
 #include <iostream>
-
-#include <btBulletDynamicsCommon.h>
-
-int main (void)
+#include "sec.hpp"
+static void error_callback(int error, const char* description)
 {
+    fprintf(stderr, "Error: %s\n", description);
+}
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+int main(void)
+{
+    output_message("this is a message");
+    GLFWwindow* window;
+    glfwSetErrorCallback(error_callback);
+    if (!glfwInit())
+        exit(EXIT_FAILURE);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-        btBroadphaseInterface* broadphase = new btDbvtBroadphase();
+    window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        exit(EXIT_FAILURE);
+    }
+    glfwSetKeyCallback(window, key_callback);
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(0);
 
-        btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-        btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+    std::cout << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+    std::cout << glGetString(GL_VENDOR) << std::endl;
+    std::cout << glGetString(GL_RENDERER) << std::endl;
+    std::cout << glGetString(GL_VERSION) << std::endl;
+    std::cout << glGetString(GL_EXTENSIONS) << std::endl;
 
-        btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+    while (!glfwWindowShouldClose(window))
+    {
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
 
-        btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+	glClearColor(1, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+        std::cout << "Frame!";
 
-        dynamicsWorld->setGravity(btVector3(0, -10, 0));
-
-
-        btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
-
-        btCollisionShape* fallShape = new btSphereShape(1);
-
-
-        btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -1, 0)));
-        btRigidBody::btRigidBodyConstructionInfo
-                groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
-        btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
-        dynamicsWorld->addRigidBody(groundRigidBody);
-
-
-        btDefaultMotionState* fallMotionState =
-                new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
-        btScalar mass = 1;
-        btVector3 fallInertia(0, 0, 0);
-        fallShape->calculateLocalInertia(mass, fallInertia);
-        btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, fallShape, fallInertia);
-        btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
-        dynamicsWorld->addRigidBody(fallRigidBody);
-
-
-        for (int i = 0; i < 300; i++) {
-                dynamicsWorld->stepSimulation(1 / 60.f, 10);
-
-                btTransform trans;
-                fallRigidBody->getMotionState()->getWorldTransform(trans);
-
-                std::cout << "sphere height: " << trans.getOrigin().getY() << std::endl;
-        }
-
-        dynamicsWorld->removeRigidBody(fallRigidBody);
-        delete fallRigidBody->getMotionState();
-        delete fallRigidBody;
-
-        dynamicsWorld->removeRigidBody(groundRigidBody);
-        delete groundRigidBody->getMotionState();
-        delete groundRigidBody;
-
-
-        delete fallShape;
-
-        delete groundShape;
-
-
-        delete dynamicsWorld;
-        delete solver;
-        delete collisionConfiguration;
-        delete dispatcher;
-        delete broadphase;
-
-        return 0;
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    exit(EXIT_SUCCESS);
 }

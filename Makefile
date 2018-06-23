@@ -7,9 +7,9 @@ LDFLAGS=-Wall -Werror -std=c++14
 # directories
 OBJ_DIR=./obj
 BIN_DIR=./bin
-INC_DIR=-I /usr/include/bullet
+INC_DIR=-I /usr/include
 LIB_DIR=
-LIBRARIES=-lBulletDynamics -lBulletCollision -lLinearMath
+LIBRARIES=-lglfw -lGL
 
 all: link
 	@echo "\e[92mMaking done!\e[39m"
@@ -25,8 +25,8 @@ link: compile
 compile: clean
 	@echo "\e[92mStart compiling...\e[39m"
 	mkdir -p $(OBJ_DIR)
-	$(CC) $(CXXFLAGS) $(INC_DIR) -c main.cpp -o $(OBJ_DIR)/main.o
-	$(CC) $(CXXFLAGS) $(INC_DIR) -c sec.cpp  -o $(OBJ_DIR)/sec.o
+	$(CC) $(CXXFLAGS) $(INC_DIR) -c main.cpp -o $(OBJ_DIR)/main.o 
+	$(CC) $(CXXFLAGS) $(INC_DIR) -c sec.cpp  -o $(OBJ_DIR)/sec.o 
 
 clean:
 	@echo "\e[92mClean up...\e[39m"
