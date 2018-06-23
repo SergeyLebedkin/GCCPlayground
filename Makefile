@@ -9,7 +9,7 @@ OBJ_DIR=./obj
 BIN_DIR=./bin
 INC_DIR=-I /usr/include
 LIB_DIR=
-LIBRARIES=-lglfw -lGL
+LIBRARIES=-lglfw -lGLESv2
 
 all: link
 	@echo "\e[92mMaking done!\e[39m"
