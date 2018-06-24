@@ -1,8 +1,8 @@
 # compiler options
 LD=g++
 CC=g++
-CXXFLAGS=-Wall -Werror -std=c++14
-LDFLAGS=-Wall -Werror -std=c++14
+CXXFLAGS=-Wall -std=c++14
+LDFLAGS=-Wall -std=c++14
 
 # directories
 OBJ_DIR=./obj
@@ -21,6 +21,7 @@ link: compile
 	$(LD) $(LDFLAGS) $(LIB_DIR) -o $(BIN_DIR)/main \
 	$(OBJ_DIR)/main.o \
 	$(OBJ_DIR)/sec.o \
+	$(OBJ_DIR)/oglutils.o \
 	$(LIBRARIES)
 
 compile: clean
@@ -28,6 +29,7 @@ compile: clean
 	mkdir -p $(OBJ_DIR)
 	$(CC) $(CXXFLAGS) $(DEFINES) $(INC_DIR) -c main.cpp -o $(OBJ_DIR)/main.o 
 	$(CC) $(CXXFLAGS) $(DEFINES) $(INC_DIR) -c sec.cpp  -o $(OBJ_DIR)/sec.o 
+	$(CC) $(CXXFLAGS) $(DEFINES) $(INC_DIR) -c oglutils.cpp  -o $(OBJ_DIR)/oglutils.o 
 
 run:
 	./bin/main
