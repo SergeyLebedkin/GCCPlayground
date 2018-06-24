@@ -55,8 +55,6 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 int main(void)
 {
-	glm::vec3 v(0);
-
 	GLFWwindow* window;
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit())
@@ -79,22 +77,20 @@ int main(void)
 
 	output_opengl_caps();
 
-	GLuint vertex_buffer, vertex_shader, fragment_shader, program;
-    GLint mvp_location, vpos_location, vcol_location;
-
     // NOTE: OpenGL error checks have been omitted for brevity
+    GLuint vertex_buffer = 0;
     glGenBuffers(1, &vertex_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // create shader
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
     glCompileShader(vertex_shader);
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
     glCompileShader(fragment_shader);
-    program = glCreateProgram();
+    GLuint program = glCreateProgram();
     glAttachShader(program, vertex_shader);
     glAttachShader(program, fragment_shader);
     glLinkProgram(program);
@@ -125,29 +121,29 @@ int main(void)
 			std::cout << errorLogFrag.data();
 	}
 
-	std::cout << "shader info: " << std::endl;
-	std::cout << vertex_shader << std::endl;
-	std::cout << fragment_shader << std::endl;
-    std::cout << program << std::endl;
-
-    std::cout << (mvp_location = glGetUniformLocation(program, "MVP")) << std::endl;
-    std::cout << (vcol_location = glGetAttribLocation(program, "vCol")) << std::endl;
-    std::cout << (vpos_location = glGetAttribLocation(program, "vPos")) << std::endl;
+    GLuint mvp_location = glGetUniformLocation(program, "MVP");
+    GLuint vcol_location = glGetAttribLocation(program, "vCol");
+    GLuint vpos_location = glGetAttribLocation(program, "vPos");
+    std::cout << mvp_location << std::endl;
+    std::cout << vcol_location << std::endl;
+    std::cout << vpos_location << std::endl;
 
     glEnableVertexAttribArray(vpos_location);
     glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*) 0);
     glEnableVertexAttribArray(vcol_location);
     glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*) (sizeof(float) * 2));
 
-
+    double prevTime = glfwGetTime();
+    uint32_t frames = 0;
     while (!glfwWindowShouldClose(window))
-    {
-        float ratio;
+    {        
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
-        ratio = width / (float) height;
+        float ratio = width / (float) height;
+
         glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
 
         glm::mat4 m = glm::rotate(glm::mat4(1.0f), (float) glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
         glm::mat4 p = glm::ortho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
@@ -159,8 +155,14 @@ int main(void)
 
         glfwSwapBuffers(window);
         glfwPollEvents();
-    }
 
+        if (glfwGetTime() - prevTime > 1.0) {
+            std::cout << "Frames per second: " << frames << std::endl;
+            prevTime = glfwGetTime();
+            frames = 0;
+        }
+        frames++;
+    }
 
     glfwDestroyWindow(window);
 	glfwTerminate();
