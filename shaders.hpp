@@ -1,25 +1,27 @@
 #pragma once
 
+#include <GLFW/glfw3.h>
+
 // vertex shader source code
-static const char* vertex_shader_text = R"(
-uniform mat4 MVP;
-attribute vec3 vCol;
-attribute vec2 vPos;
-varying vec3 color;
+static const GLchar *vertex_shader_text = R"(
+uniform mat4 uMVP;
+attribute vec3 aPosition;
+attribute vec3 aColor;
+varying vec3 vColor;
 void main()
 {
-    gl_Position = MVP * vec4(vPos, 0.0, 1.0);
-    color = vCol;
+    gl_Position = uMVP * vec4(aPosition, 1.0);
+    vColor = aColor;
 }
 )";
 
 // fragment shader source code
-static const char* fragment_shader_text = R"(
+static const GLchar *fragment_shader_text = R"(
 precision lowp float;
-varying vec3 color;
+varying vec3 vColor;
 void main()
 {
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(vColor, 1.0);
 }
 )";
 

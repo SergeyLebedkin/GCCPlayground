@@ -1,7 +1,5 @@
 #include <iostream>
 
-#include <GLFW/glfw3.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp> 
@@ -83,15 +81,15 @@ int main(int argc, char ** argv)
         std::cout << "fragment shader error!";
 
     // get attributes and uniforms location
-    GLuint mvp_location = glGetUniformLocation(program, "MVP");
-    GLuint vcol_location = glGetAttribLocation(program, "vCol");
-    GLuint vpos_location = glGetAttribLocation(program, "vPos");
+    GLuint uMVP_location = glGetUniformLocation(program, "uMVP");
+    GLuint aColor_location = glGetAttribLocation(program, "aColor");
+    GLuint aPosition_location = glGetAttribLocation(program, "aPosition");
 
     // set attribs arrays
-    glEnableVertexAttribArray(vpos_location);
-    glVertexAttribPointer(vpos_location, 3, GL_FLOAT, GL_FALSE, sizeof(VFCoordColor), (void*) 0);
-    glEnableVertexAttribArray(vcol_location);
-    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(VFCoordColor), (void*) (sizeof(float) * 3));
+    glEnableVertexAttribArray(aPosition_location);
+    glVertexAttribPointer(aPosition_location, 3, GL_FLOAT, GL_FALSE, sizeof(VFCoordColor), (void*) 0);
+    glEnableVertexAttribArray(aColor_location);
+    glVertexAttribPointer(aColor_location, 3, GL_FLOAT, GL_FALSE, sizeof(VFCoordColor), (void*) (sizeof(float) * 3));
 
     // main cicle
     double prevTime = glfwGetTime();
@@ -103,10 +101,12 @@ int main(int argc, char ** argv)
         glfwGetFramebufferSize(window, &width, &height);
 
         // create matrixes
-        float ratio = width / (float) height;
-        glm::mat4 m = glm::rotate(glm::mat4(1.0f), (float) glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-        glm::mat4 p = glm::ortho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        glm::mat4 mvp = p*m;
+        glm::mat4 m = glm::rotate(glm::mat4(1.0f), (float) glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f));
+        glm::mat4 v = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 p = glm::perspective(glm::radians(45.0f), (float) width / (float) height, 0.1f, 100.0f);
+
+        // calc MVP matrix 
+        glm::mat4 mvp = p*v*m;
 
         // init draw buffer
         glViewport(0, 0, width, height);
@@ -115,7 +115,7 @@ int main(int argc, char ** argv)
 
         // draw, using shader
         glUseProgram(program);
-        glUniformMatrix4fv(mvp_location, 1, GL_FALSE, glm::value_ptr(mvp));
+        glUniformMatrix4fv(uMVP_location, 1, GL_FALSE, glm::value_ptr(mvp));
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // swap baffer
