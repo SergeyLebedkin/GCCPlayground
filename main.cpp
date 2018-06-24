@@ -122,7 +122,7 @@ int main(int argc, char ** argv)
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        // FPS
+        // update and draw FPS
         double diffTime = glfwGetTime() - prevTime;
         if (diffTime > 1.0) 
         {
@@ -133,6 +133,8 @@ int main(int argc, char ** argv)
             prevTime = glfwGetTime();
             frames = 0;
         }
+
+        // increment frames count
         frames++;
     }
 
