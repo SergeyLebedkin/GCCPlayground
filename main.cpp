@@ -7,40 +7,15 @@
 #include <glm/gtc/matrix_transform.hpp> 
 
 #include "oglutils.hpp"
+#include "shaders.hpp"
+#include "vertFormats.hpp"
 
-static const struct
+const VFCoordColor vertices[3] =
 {
-    float x, y;
-    float r, g, b;
-} vertices[3] =
-{
-    { -0.6f, -0.4f, 1.f, 0.f, 0.f },
-    {  0.6f, -0.4f, 0.f, 1.f, 0.f },
-    {   0.f,  0.6f, 0.f, 0.f, 1.f }
+    { -0.6f, -0.4f, 0.0f, 1.f, 0.f, 0.f },
+    {  0.6f, -0.4f, 0.0f, 0.f, 1.f, 0.f },
+    {   0.f,  0.6f, 0.0f, 0.f, 0.f, 1.f }
 };
-
-// vertex shader source code
-static const char* vertex_shader_text = R"(
-uniform mat4 MVP;
-attribute vec3 vCol;
-attribute vec2 vPos;
-varying vec3 color;
-void main()
-{
-    gl_Position = MVP * vec4(vPos, 0.0, 1.0);
-    color = vCol;
-}
-)";
-
-// fragment shader source code
-static const char* fragment_shader_text = R"(
-precision lowp float;
-varying vec3 color;
-void main()
-{
-    gl_FragColor = vec4(color, 1.0);
-}
-)";
 
 // main
 int main(int argc, char ** argv)
@@ -81,6 +56,7 @@ int main(int argc, char ** argv)
 
     // print opengl caps
 	output_opengl_caps();
+    output_all_shaders();
 
     // create VBO
     GLuint vertex_buffer = 0;
@@ -113,9 +89,9 @@ int main(int argc, char ** argv)
 
     // set attribs arrays
     glEnableVertexAttribArray(vpos_location);
-    glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*) 0);
+    glVertexAttribPointer(vpos_location, 3, GL_FLOAT, GL_FALSE, sizeof(VFCoordColor), (void*) 0);
     glEnableVertexAttribArray(vcol_location);
-    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*) (sizeof(float) * 2));
+    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(VFCoordColor), (void*) (sizeof(float) * 3));
 
     // main cicle
     double prevTime = glfwGetTime();

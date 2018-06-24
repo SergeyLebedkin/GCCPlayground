@@ -22,24 +22,32 @@ link: compile
 	mkdir -p $(BIN_DIR)
 	$(LD) $(LDFLAGS) $(LIB_DIR) -o $(BIN_DIR)/main \
 	$(OBJ_DIR)/main.o \
-	$(OBJ_DIR)/sec.o \
 	$(OBJ_DIR)/oglutils.o \
+	$(OBJ_DIR)/shaders.o \
+	$(OBJ_DIR)/vertFormats.o \
 	$(LIBRARIES)
 	@echo "\e[92mStart linking...\e[39m"
 
 # compile target
-compile: $(OBJ_DIR)/main.o $(OBJ_DIR)/sec.o $(OBJ_DIR)/oglutils.o 
+compile: \
+	$(OBJ_DIR)/main.o \
+	$(OBJ_DIR)/oglutils.o \
+	$(OBJ_DIR)/shaders.o \
+	$(OBJ_DIR)/vertFormats.o
 	@echo "\e[92mLinking done...\e[39m"
 
 # compile sources
 $(OBJ_DIR)/main.o: $(OBJ_DIR)
 	$(CC) $(CXXFLAGS) $(DEFINES) $(INC_DIR) -c main.cpp -o $(OBJ_DIR)/main.o 
 
-$(OBJ_DIR)/sec.o: $(OBJ_DIR)
-	$(CC) $(CXXFLAGS) $(DEFINES) $(INC_DIR) -c sec.cpp -o $(OBJ_DIR)/sec.o 
-
 $(OBJ_DIR)/oglutils.o: $(OBJ_DIR)
 	$(CC) $(CXXFLAGS) $(DEFINES) $(INC_DIR) -c oglutils.cpp -o $(OBJ_DIR)/oglutils.o 
+
+$(OBJ_DIR)/shaders.o: $(OBJ_DIR)
+	$(CC) $(CXXFLAGS) $(DEFINES) $(INC_DIR) -c shaders.cpp -o $(OBJ_DIR)/shaders.o 
+
+$(OBJ_DIR)/vertFormats.o: $(OBJ_DIR)
+	$(CC) $(CXXFLAGS) $(DEFINES) $(INC_DIR) -c vertFormats.cpp -o $(OBJ_DIR)/vertFormats.o 
 
 # create folder
 $(OBJ_DIR):
