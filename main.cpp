@@ -19,41 +19,41 @@ const VFCoordColor vertices[3] =
 int main(int argc, char ** argv)
 {
     // set error handling
-	glfwSetErrorCallback([](int error, const char* description){
+    glfwSetErrorCallback([](int error, const char* description){
         std::cout << "Error: " << description << std::endl;
     });
 
     // init glfw
-	if (!glfwInit())
-		exit(EXIT_FAILURE);
+    if (!glfwInit())
+	exit(EXIT_FAILURE);
 
     // select OpenGL version
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-	glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
     // create glfw window
-	GLFWwindow* window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
-	if (!window)
-	{
-        std::cout << "Can not create window! Exit...";
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-	}
+    GLFWwindow* window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+    if (!window)
+    {
+	std::cout << "Can not create window! Exit...";
+	glfwTerminate();
+	exit(EXIT_FAILURE);
+    }
 
     // set key callback
-	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
-        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
+    glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	glfwSetWindowShouldClose(window, GLFW_TRUE);
     });
 
     // make context current
-	glfwMakeContextCurrent(window);
-	glfwSwapInterval(0);
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(0);
 
     // print opengl caps
-	output_opengl_caps();
+    output_opengl_caps();
     output_all_shaders();
 
     // create VBO
@@ -140,6 +140,6 @@ int main(int argc, char ** argv)
 
     // destroy window and exit
     glfwDestroyWindow(window);
-	glfwTerminate();
-	exit(EXIT_SUCCESS);
+    glfwTerminate();
+    exit(EXIT_SUCCESS);
 }
